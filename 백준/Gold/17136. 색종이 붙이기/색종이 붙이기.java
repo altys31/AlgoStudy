@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,6 +10,7 @@ public class Main {
 	static int[] dy = {0,1,1};
 	static int N;
 	static int answer = Integer.MAX_VALUE;
+	static int remains =0;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,8 +22,10 @@ public class Main {
 		for(int i = 0; i<N; i++) {
 			StringTokenizer st =new StringTokenizer(br.readLine());
 			for(int j =0; j<N; j++) {
-				if(Integer.parseInt(st.nextToken()) == 1)
+				if(Integer.parseInt(st.nextToken()) == 1) {
 					arr[i][j] = true;
+					remains++;
+				}
 			}
 		}
 		
@@ -40,49 +44,40 @@ public class Main {
 		boolean isdone = true;
 
 		//종이가 없으면 컷
-		for(int i = 1; i<6; i++) 
-			if(papers[i] < 0) 
-				return;
-		
-		for(int i = 0; i<N; i++) {
-			for(int j = 0; j<N; j++) {
-				if(arr[i][j])
-					isdone = false;
-			}
-		}
-		
-		if(isdone)
-			answer = Math.min(depth, answer);
 
 		
-		boolean[][] copied_arr = new boolean[N][N];
-		for(int i = 0; i<N; i++) 
-			for(int j =0; j<N; j++) 
-				copied_arr[i][j] = arr[i][j];
+		if(remains !=0)
+			isdone = false; 
 		
-		
+		if(isdone) {
+			answer = Math.min(depth, answer);
+			return;
+		}
+
 		for(int i = 0; i<10; i++) {
 			for(int j =0; j<10; j++) {
-				if(copied_arr[i][j]) {
+				if(arr[i][j]) {
 					//1x1 ~ 가능한만큼 붙이고, 백트래킹
-					int size = check(i,j,copied_arr,0);
-//					System.out.println(size);
+					int size = check(i,j,arr,0);
 						for(int k = size+1; k >= 1; k--) {
+							if(papers[k] == 0)
+								continue;
 							papers[k]--;
 							for(int n = i; n < i+k; n++) {
 								for(int l = j; l < j+k; l++) {
-									copied_arr[n][l] = false;
+									arr[n][l] = false;
 								}
 							}
+							remains -= k*k;
 							
-							bt(copied_arr,depth+1,papers);
+							bt(arr,depth+1,papers);
 							
 							for(int y = i; y<i+k; y++) 
 								for(int x =j; x<j+k; x++) 
-									copied_arr[y][x] = arr[y][x];
+									arr[y][x] = true;
+							remains += k*k;
 							papers[k]++;
-							
-							
+
 						}
 						return;
 				}
