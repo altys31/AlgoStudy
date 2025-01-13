@@ -9,37 +9,37 @@ public class Main {
 		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
-		ArrayList<Integer> list = new ArrayList<>();
+		int[] array = new int[N];
 		
 		st = new StringTokenizer(br.readLine());
 		
 		for(int i = 0; i<N; i++) {
-			list.add(Integer.parseInt(st.nextToken()));
+			array[i]  = Integer.parseInt(st.nextToken());
 		}
 		
 		int left = 0;
 		int right = N-1;
 		
 		int difference = Integer.MAX_VALUE;
-		int leftAnswer = list.get(0);
-		int rightAnswer = list.get(N-1);
+		int leftAnswer = array[0];
+		int rightAnswer = array[N-1];
 		
 		while(true) {
 			
 			if(left >= right)
 				break;
 			
-			int sum = list.get(left)+list.get(right);
+			int sum = array[left]+array[right];
 			
 			if(sum == 0) {
-				leftAnswer = list.get(left);
-				rightAnswer = list.get(right);
+				leftAnswer = array[left];
+				rightAnswer = array[right];
 				break;
 			}
 			
 			if(Math.abs(sum) <= difference) {
-				leftAnswer = list.get(left);
-				rightAnswer = list.get(right);
+				leftAnswer = array[left];
+				rightAnswer = array[right];
 				difference = Math.abs(sum);
 			};
 			
@@ -52,3 +52,5 @@ public class Main {
 	}
 
 }
+
+
